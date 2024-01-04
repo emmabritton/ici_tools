@@ -54,7 +54,7 @@ jobs:
             name: ici-tools-windows.zip
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
             targets: ${{ matrix.target }}
@@ -64,12 +64,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
 
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: build
-          toolchain: stable
-          args: --release --target=${{ matrix.target }}
+      - name: build
+        run: cargo buld --release
 
       - name: Prepare build artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -89,7 +85,7 @@ jobs:
           tar cvf ../../../${{ matrix.name }} ici_viewer
           tar cvf ../../../${{ matrix.name }} ici_converter
           cd -
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v1.15
         with:
           files: ${{ matrix.name }}
         env:
