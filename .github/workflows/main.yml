@@ -85,7 +85,7 @@ jobs:
           tar cvf ../../../${{ matrix.name }} ici_viewer
           tar cvf ../../../${{ matrix.name }} ici_converter
           cd -
-      - uses: softprops/action-gh-release@v1.15
+      - uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.name }}
         env:
