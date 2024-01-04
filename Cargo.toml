@@ -17,6 +17,6 @@ name = "ici_viewer"
 path = "src/viewer.rs"
 
 [dependencies]
-pixels-graphics-lib = { path="../rust-graphics-lib", default-features = false, features = ["images"] }
+pixels-graphics-lib = { version = "0.15.2", default-features = false, features = ["images"] }
 clap = { version = "4.4.12", features = ["derive"] }
 color-eyre = "0.6.2"
