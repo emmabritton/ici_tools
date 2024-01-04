@@ -8,6 +8,11 @@ readme = "README.md"
 license-file = "LICENSE"
 description = "ICI tools"
 
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
 [[bin]]
 name = "ici_converter"
 path = "src/converter.rs"
