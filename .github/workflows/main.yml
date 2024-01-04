@@ -57,7 +57,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
-            targets: ${{ matrix.target }}
             components: clippy, rustfmt
 
       - name: Install linux deps
@@ -65,7 +64,7 @@ jobs:
         run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
 
       - name: build
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Prepare build artifacts [Windows]
         if: matrix.os == 'windows-latest'
