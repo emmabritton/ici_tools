@@ -68,16 +68,16 @@ jobs:
       - name: Run cargo check --all-targets
         run: cargo check --all-targets
 
+      - name: Install linux deps
+        if: matrix.os == 'ubuntu-20.04'
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
+
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
           toolchain: stable
           args: --release --target=${{ matrix.target }}
-
-      - name: Install linux deps
-        if: matrix.os == 'ubuntu-20.04'
-        run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
 
       - name: Prepare build artifacts [Windows]
         if: matrix.os == 'windows-latest'
