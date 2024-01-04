@@ -1,0 +1,104 @@
+name: Rust
+
+on:
+  push:
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  check:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Rust toolchain with rustfmt
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          override: true
+          toolchain: stable
+          components: rustfmt
+
+      - name: Install linux libs
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
+
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --all-targets -- -D clippy::all
+      - name: test
+        run: cargo test
+
+  build_and_release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Build and Release
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-apple-darwin
+          - x86_64-pc-windows-msvc
+          - x86_64-unknown-linux-gnu
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-20.04
+            name: ici-tools-linux.tar.gz
+          - target: x86_64-apple-darwin
+            os: macOS-latest
+            name: ici-tools-mac.tar.gz
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: ici-tools-windows.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run cargo check --all-targets
+        run: cargo check --all-targets
+
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          toolchain: stable
+          args: --release --target=${{ matrix.target }}
+
+      - name: Install linux deps
+        if: matrix.os == 'ubuntu-20.04'
+        run: sudo apt-get update; sudo apt-get install --no-install-recommends pkg-config build-essential gcc-multilib
+
+      - name: Prepare build artifacts [Windows]
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd target/${{ matrix.target }}/release
+          strip ici_viewer.exe
+          strip ici_converter.exe
+          7z a ../../../${{ matrix.name }} ici_viewer.exe
+          7z a ../../../${{ matrix.name }} ici_converter.exe
+          cd -
+      - name: Prepare build artifacts [-nix]
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd target/${{ matrix.target }}/release
+          strip ici_viewer
+          strip ici_converter
+          tar cvf ../../../${{ matrix.name }} ici_viewer
+          tar cvf ../../../${{ matrix.name }} ici_converter
+          cd -
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ matrix.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,22 @@
+[package]
+name = "ici_tools"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Emma Britton <emmabritton@pm.me>"]
+readme = "README.md"
+license-file = "LICENSE"
+description = "ICI tools"
+
+[[bin]]
+name = "ici_converter"
+path = "src/converter.rs"
+
+[[bin]]
+name = "ici_viewer"
+path = "src/viewer.rs"
+
+[dependencies]
+pixels-graphics-lib = { path="../rust-graphics-lib", default-features = false, features = ["images"] }
+clap = { version = "4.4.12", features = ["derive"] }
+color-eyre = "0.6.2"
