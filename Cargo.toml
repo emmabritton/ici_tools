@@ -1,6 +1,6 @@
 [package]
 name = "ici_tools"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 publish = false
 authors = ["Emma Britton <emmabritton@pm.me>"]
@@ -13,15 +13,7 @@ opt-level = 3
 lto = true
 codegen-units = 1
 
-[[bin]]
-name = "ici_converter"
-path = "src/converter.rs"
-
-[[bin]]
-name = "ici_viewer"
-path = "src/viewer.rs"
-
 [dependencies]
-pixels-graphics-lib = { version = "0.15.2", default-features = false, features = ["images"] }
+pixels-graphics-lib = {version="0.15.3", default-features = false, features = ["images"] }
 clap = { version = "4.4.12", features = ["derive"] }
 color-eyre = "0.6.2"

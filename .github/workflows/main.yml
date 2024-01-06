@@ -70,17 +70,15 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip ici_viewer.exe
-          strip ici_converter.exe
-          7z a ../../../${{ matrix.name }} ici_viewer.exe ici_converter.exe
+          strip ici_tools.exe
+          7z a ../../../${{ matrix.name }} ici_tools.exe
           cd -
       - name: Prepare build artifacts [-nix]
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip ici_viewer
-          strip ici_converter
-          tar cvf ../../../${{ matrix.name }} ici_viewer ici_converter
+          strip ici_tools
+          tar cvf ../../../${{ matrix.name }} ici_tools
           cd -
       - uses: softprops/action-gh-release@v1
         with:
