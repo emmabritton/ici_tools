@@ -1,16 +1,16 @@
 mod converter;
-mod viewer;
 mod palette_read;
-mod wrapper;
 mod palette_set;
+mod viewer;
+mod wrapper;
 
-use std::path::PathBuf;
-use clap::{Parser, Subcommand};
-use color_eyre::Result;
 use crate::converter::convert_format;
 use crate::palette_read::palette_extract;
 use crate::palette_set::palette_set;
 use crate::viewer::view;
+use clap::{Parser, Subcommand};
+use color_eyre::Result;
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -25,14 +25,24 @@ enum Commands {
     Convert {
         #[arg(value_name = "FILE", help = "Source image file (png, bmp, etc)")]
         input: PathBuf,
-        #[arg(short = 'o', long = "output", value_name = "FILE", help = "Output file name")]
+        #[arg(
+            short = 'o',
+            long = "output",
+            value_name = "FILE",
+            help = "Output file name"
+        )]
         output: Option<PathBuf>,
     },
     /// Display ICI or ICA file
     View {
         #[arg(value_name = "FILE", help = "Image file to view")]
         input: PathBuf,
-        #[arg(short = 'p', long = "palette", value_name = "FILE", help = "Replacement palette")]
+        #[arg(
+            short = 'p',
+            long = "palette",
+            value_name = "FILE",
+            help = "Replacement palette"
+        )]
         palette: Option<PathBuf>,
     },
     /// Read or alter palettes
@@ -48,14 +58,24 @@ enum PaletteCommands {
     Extract {
         #[arg(value_name = "FILE", help = "Image file")]
         input: PathBuf,
-        #[arg(short = 'o', long = "output", value_name = "FILE", help = "Palette file name")]
+        #[arg(
+            short = 'o',
+            long = "output",
+            value_name = "FILE",
+            help = "Palette file name"
+        )]
         output: Option<PathBuf>,
     },
     /// Copy palette from one file and apply to others
     Set {
         #[arg(value_name = "FILE", help = "Image or palette source file")]
         input: PathBuf,
-        #[arg(short = 'o', long = "output", value_name = "FILE", help = "ICI files to update")]
+        #[arg(
+            short = 'o',
+            long = "output",
+            value_name = "FILE",
+            help = "ICI files to update"
+        )]
         files: Vec<PathBuf>,
     },
 }
@@ -71,7 +91,7 @@ pub fn main() -> Result<()> {
         Commands::Palette { command } => match command {
             PaletteCommands::Extract { input, output } => palette_extract(input, output)?,
             PaletteCommands::Set { input, files } => palette_set(input, files)?,
-        }
+        },
     }
 
     Ok(())

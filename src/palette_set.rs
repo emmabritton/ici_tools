@@ -1,9 +1,9 @@
+use crate::wrapper::{load, open_ici_file};
+use color_eyre::eyre::eyre;
+use color_eyre::Result;
+use pixels_graphics_lib::prelude::{FilePalette, IciColor, IndexedWrapper, JascPalette};
 use std::fs;
 use std::path::PathBuf;
-use color_eyre::eyre::eyre;
-use pixels_graphics_lib::prelude::{FilePalette, IciColor, IndexedWrapper, JascPalette};
-use crate::wrapper::{load, open_ici_file};
-use color_eyre::Result;
 
 pub fn palette_set(input: PathBuf, others: Vec<PathBuf>) -> Result<()> {
     let palette = read_palette(input)?;
@@ -31,7 +31,10 @@ fn read_palette(file: PathBuf) -> Result<Vec<IciColor>> {
                 let palette = JascPalette::from_file_contents(&str)?;
                 Ok(palette.colors)
             }
-            _ => Err(eyre!("Unsupported file type {}, only ici, ica and pal files are supported", file.to_string_lossy()))
+            _ => Err(eyre!(
+                "Unsupported file type {}, only ici, ica and pal files are supported",
+                file.to_string_lossy()
+            )),
         };
     }
     Err(eyre!("Unable to read file {}", file.to_string_lossy()))
@@ -42,7 +45,11 @@ fn assign_palette(file: &PathBuf, palette: &[IciColor]) -> Result<()> {
 
     let mut image = load(bytes, false)?;
     if image.get_palette().len() != palette.len() {
-        return Err(eyre!("Palette wrong size, was {} much be {}", image.get_palette().len(), palette.len()));
+        return Err(eyre!(
+            "Palette wrong size, was {} much be {}",
+            image.get_palette().len(),
+            palette.len()
+        ));
     }
 
     image.set_palette(palette)?;

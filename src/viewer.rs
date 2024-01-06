@@ -1,14 +1,13 @@
-use std::fs;
+use crate::wrapper::*;
+use color_eyre::Result;
 use pixels_graphics_lib::buffer_graphics_lib::Graphics;
+use pixels_graphics_lib::prelude::*;
 use pixels_graphics_lib::prelude::{KeyCode, Timing, WHITE};
 use pixels_graphics_lib::{run, Options, System};
+use std::fs;
 use std::path::PathBuf;
-use color_eyre::Result;
-use pixels_graphics_lib::prelude::*;
-use crate::wrapper::*;
 
 pub fn view(input: PathBuf, palette_file: Option<PathBuf>) -> Result<()> {
-
     let (bytes, filename) = open_ici_file(input)?;
     let filename = filename.unwrap_or(String::from("Image"));
 
@@ -50,7 +49,7 @@ impl System for ImageDisplayer {
 
     fn render(&mut self, graphics: &mut Graphics) {
         graphics.clear(WHITE);
-        graphics.draw_wrapped_image((0,0), &self.image);
+        graphics.draw_wrapped_image((0, 0), &self.image);
     }
 
     fn on_key_down(&mut self, keys: Vec<KeyCode>) {

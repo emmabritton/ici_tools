@@ -1,3 +1,4 @@
+use crate::wrapper::create_file_name;
 use color_eyre::eyre::eyre;
 use color_eyre::Result;
 use pixels_graphics_lib::prelude::*;
@@ -5,10 +6,8 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
-use crate::wrapper::create_file_name;
 
 pub fn convert_format(input: PathBuf, output: Option<PathBuf>) -> Result<()> {
-
     let output_file_name = create_file_name(&input, output, "ici")?;
     let input_file = process_input(input)?;
     let ici = convert(input_file)?;
@@ -56,5 +55,3 @@ fn convert(image: Image) -> Result<IndexedImage> {
         pixels,
     )?)
 }
-
-

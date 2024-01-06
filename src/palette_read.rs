@@ -1,8 +1,8 @@
+use crate::wrapper::{create_file_name, load, open_ici_file};
+use color_eyre::Result;
+use pixels_graphics_lib::prelude::*;
 use std::fs;
 use std::path::PathBuf;
-use color_eyre::Result;
-use crate::wrapper::{create_file_name, load, open_ici_file};
-use pixels_graphics_lib::prelude::*;
 
 pub fn palette_extract(input: PathBuf, output: Option<PathBuf>) -> Result<()> {
     let (bytes, _) = open_ici_file(input.clone())?;

@@ -1,9 +1,9 @@
-use std::fs;
-use std::path::{Path, PathBuf};
 use color_eyre::eyre::eyre;
-use pixels_graphics_lib::prelude::{AnimatedIndexedImage, FilePalette, IndexedImage};
 use color_eyre::Result;
 use pixels_graphics_lib::prelude::prelude::IndexedWrapper;
+use pixels_graphics_lib::prelude::{AnimatedIndexedImage, FilePalette, IndexedImage};
+use std::fs;
+use std::path::{Path, PathBuf};
 
 pub fn open_ici_file(input: PathBuf) -> Result<(Vec<u8>, Option<String>)> {
     let filename = input
@@ -43,7 +43,7 @@ pub fn load(bytes: Vec<u8>, validate_palette: bool) -> Result<IndexedWrapper> {
                     Err(eyre!(anim_err))
                 };
             }
-        }
+        },
     }
 
     if validate_palette {
