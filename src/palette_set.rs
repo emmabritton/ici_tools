@@ -1,7 +1,7 @@
 use crate::wrapper::{load, open_ici_file};
 use color_eyre::eyre::eyre;
 use color_eyre::Result;
-use pixels_graphics_lib::prelude::{FilePalette, IciColor, IndexedWrapper, JascPalette};
+use pixels_graphics_lib::prelude::*;
 use std::fs;
 use std::path::PathBuf;
 
@@ -17,7 +17,7 @@ pub fn palette_set(input: PathBuf, others: Vec<PathBuf>) -> Result<()> {
     Ok(())
 }
 
-fn read_palette(file: PathBuf) -> Result<Vec<IciColor>> {
+fn read_palette(file: PathBuf) -> Result<Vec<Color>> {
     if let Some(ext) = file.extension().and_then(|s| s.to_str()) {
         return match ext {
             "ici" | "ica" => {
@@ -40,7 +40,7 @@ fn read_palette(file: PathBuf) -> Result<Vec<IciColor>> {
     Err(eyre!("Unable to read file {}", file.to_string_lossy()))
 }
 
-fn assign_palette(file: &PathBuf, palette: &[IciColor]) -> Result<()> {
+fn assign_palette(file: &PathBuf, palette: &[Color]) -> Result<()> {
     let (bytes, _) = open_ici_file(file.clone())?;
 
     let mut image = load(bytes, false)?;

@@ -1,12 +1,14 @@
 mod converter;
 mod palette_read;
 mod palette_set;
+mod png;
 mod viewer;
 mod wrapper;
 
 use crate::converter::convert_format;
 use crate::palette_read::palette_extract;
 use crate::palette_set::palette_set;
+use crate::png::to_png;
 use crate::viewer::view;
 use clap::{Parser, Subcommand};
 use color_eyre::Result;
@@ -30,6 +32,25 @@ enum Commands {
             long = "output",
             value_name = "FILE",
             help = "Output file name"
+        )]
+        output: Option<PathBuf>,
+    },
+    /// Convert ICI to PNG. Animation is not supported
+    Png {
+        #[arg(value_name = "FILE", help = "Source image file (ici)")]
+        input: PathBuf,
+        #[arg(
+            short = 'o',
+            long = "output",
+            value_name = "FILE",
+            help = "Output file name"
+        )]
+        palette: Option<PathBuf>,
+        #[arg(
+            short = 'p',
+            long = "palette",
+            value_name = "FILE",
+            help = "Palette file name"
         )]
         output: Option<PathBuf>,
     },
@@ -88,6 +109,11 @@ pub fn main() -> Result<()> {
     match args.command {
         Commands::Convert { input, output } => convert_format(input, output)?,
         Commands::View { input, palette } => view(input, palette)?,
+        Commands::Png {
+            input,
+            palette,
+            output,
+        } => to_png(input, palette, output)?,
         Commands::Palette { command } => match command {
             PaletteCommands::Extract { input, output } => palette_extract(input, output)?,
             PaletteCommands::Set { input, files } => palette_set(input, files)?,

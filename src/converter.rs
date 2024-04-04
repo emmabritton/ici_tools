@@ -41,17 +41,16 @@ fn convert(image: Image) -> Result<IndexedImage> {
         ));
     }
 
-    let palette: Vec<IciColor> = colors.iter().map(|c| c.to_ici()).collect();
     let pixels = image
         .pixels()
         .iter()
-        .map(|p| palette.iter().position(|c| c.to_color() == *p).unwrap() as u8)
+        .map(|p| colors.iter().position(|c| c == p).unwrap() as u8)
         .collect();
 
     Ok(IndexedImage::new(
         width as u8,
         height as u8,
-        palette,
+        colors.into_iter().collect(),
         pixels,
     )?)
 }

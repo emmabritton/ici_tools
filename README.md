@@ -11,6 +11,7 @@ ici_tools <COMMAND>
 
 Commands:
   convert  Convert PNGs, JPGs, etc to ICIs. Animation is not supported
+  png      Convert ICI to PNG. Animation is not supported
   view     Display ICI or ICA file
   palette  Read or alter palettes
   help     Print this message or the help of the given subcommand(s)
@@ -38,6 +39,24 @@ Options:
 ```
 
 Example: `./ici_tools convert icon.png`
+
+### PNG
+
+Convert ICI to PNG. Animation is not supported
+
+```
+Usage: ici_tools png [OPTIONS] <FILE>
+
+Arguments:
+<FILE>  Source image file (ici)
+
+Options:
+-o, --output <FILE>   Output file name
+-p, --palette <FILE>  Palette file name
+-h, --help            Print help
+```
+
+Example `./ici_tools png image.ici`
 
 ### View
 
