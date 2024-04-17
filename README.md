@@ -1,6 +1,6 @@
 # ICI Tools
 
-Various tools for working with ICI files
+Various tools for working with [ICI files](https://github.com/emmabritton/ici-files) 
 
 ## Usage
 
